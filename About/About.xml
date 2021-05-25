@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ModMetaData>
+	<name>Weapons of War</name>
+	<author>Blazen_Rock</author>
+	<url>https://steamcommunity.com/sharedfiles/filedetails/?id=2497662558</url>
+	<supportedVersions>
+		<li>1.2</li>
+	</supportedVersions>
+	<packageId>Blazen_Rock.WeaponsofWar</packageId>
+	<description>Work in Progress</description>
+		<modDependecies>
+			<li>
+				<packageId>oskarpotocki.vanillafactionsexpanded.core</packageId>
+				<displayName>Vanilla Expanded Framework</displayName>
+				<steamWorkshopUrl>https://steamcommunity.com/sharedfiles/filedetails/?id=2023507013</steamWorkshopUrl>
+			</li>
+		</modDependecies>
+	<loadAfter>
+		<li>oskarpotocki.vanillafactionsexpanded.core</li>
+	</loadAfter>
+</ModMetaData>
