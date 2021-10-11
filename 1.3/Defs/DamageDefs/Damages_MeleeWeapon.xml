@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <DamageDef ParentName="CutBase">
+    <defName>WW_MCE_Pierce</defName>
+    <deathMessage>{0} has been pierced to death.</deathMessage>
+    <label>pierce</label>
+    <workerClass>MeleeCombatExpansion.DamageWorker_Pierce</workerClass>
+  </DamageDef>
+  
+	<ManeuverDef>
+    <defName>WW_MCE_Pierce</defName>
+    <requiredCapacity>WW_MCE_Pierce</requiredCapacity>
+    <verb>
+      <verbClass>Verb_MeleeAttackDamage</verbClass>
+      <meleeDamageDef>WW_MCE_Pierce</meleeDamageDef>
+    </verb>
+    <logEntryDef>MeleeAttack</logEntryDef>
+    <combatLogRulesHit>Maneuver_Slash_MeleeHit</combatLogRulesHit>
+    <combatLogRulesDeflect>Maneuver_Slash_MeleeDeflect</combatLogRulesDeflect>
+    <combatLogRulesMiss>Maneuver_Slash_MeleeMiss</combatLogRulesMiss>
+    <combatLogRulesDodge>Maneuver_Slash_MeleeDodge</combatLogRulesDodge>
+  </ManeuverDef>
+  
+  <ToolCapacityDef>
+    <defName>WW_MCE_Pierce</defName>
+    <label>pierce</label>
+  </ToolCapacityDef>
+  
+  <DamageDef ParentName="CutBase">
+    <defName>WW_MCE_Cleave</defName>
+    <deathMessage>{0} has been cleaved to death.</deathMessage>
+    <label>cleave</label>
+    <workerClass>MeleeCombatExpansion.DamageWorker_Cleave</workerClass>
+  </DamageDef>
+  
+	<ManeuverDef>
+    <defName>WW_MCE_Cleave</defName>
+    <requiredCapacity>WW_MCE_Cleave</requiredCapacity>
+    <verb>
+      <verbClass>Verb_MeleeAttackDamage</verbClass>
+      <meleeDamageDef>WW_MCE_Cleave</meleeDamageDef>
+    </verb>
+    <logEntryDef>MeleeAttack</logEntryDef>
+    <combatLogRulesHit>Maneuver_Slash_MeleeHit</combatLogRulesHit>
+    <combatLogRulesDeflect>Maneuver_Slash_MeleeDeflect</combatLogRulesDeflect>
+    <combatLogRulesMiss>Maneuver_Slash_MeleeMiss</combatLogRulesMiss>
+    <combatLogRulesDodge>Maneuver_Slash_MeleeDodge</combatLogRulesDodge>
+  </ManeuverDef>
+  
+  <ToolCapacityDef>
+    <defName>WW_MCE_Cleave</defName>
+    <label>cleave</label>
+  </ToolCapacityDef>
+
+  <DamageDef ParentName="CutBase">
+    <defName>WW_MCE_Shred</defName>
+    <deathMessage>{0} has been shreded to death.</deathMessage>
+    <label>shred</label>
+    <workerClass>DamageWorker_Stab</workerClass>
+  </DamageDef>
+  
+	<ManeuverDef>
+    <defName>WW_MCE_Shred</defName>
+    <requiredCapacity>WW_MCE_Shred</requiredCapacity>
+    <verb>
+      <verbClass>Verb_MeleeAttackDamage</verbClass>
+      <meleeDamageDef>WW_MCE_Shred</meleeDamageDef>
+    </verb>
+    <logEntryDef>MeleeAttack</logEntryDef>
+    <combatLogRulesHit>Maneuver_Slash_MeleeHit</combatLogRulesHit>
+    <combatLogRulesDeflect>Maneuver_Slash_MeleeDeflect</combatLogRulesDeflect>
+    <combatLogRulesMiss>Maneuver_Slash_MeleeMiss</combatLogRulesMiss>
+    <combatLogRulesDodge>Maneuver_Slash_MeleeDodge</combatLogRulesDodge>
+  </ManeuverDef>
+  
+  <ToolCapacityDef>
+    <defName>WW_MCE_Shred</defName>
+    <label>shred</label>
+  </ToolCapacityDef>
+  
+  <DamageDef ParentName="BluntBase">
+    <defName>WW_MCE_Smash</defName>
+    <deathMessage>{0} has been smashed to death.</deathMessage>
+    <label>smash</label>
+    <workerClass>MeleeCombatExpansion.DamageWorker_Smash</workerClass>
+  </DamageDef>
+  
+	<ManeuverDef>
+    <defName>WW_MCE_Smash</defName>
+    <requiredCapacity>WW_MCE_Smash</requiredCapacity>
+    <verb>
+      <verbClass>Verb_MeleeAttackDamage</verbClass>
+      <meleeDamageDef>WW_MCE_Smash</meleeDamageDef>
+    </verb>
+    <logEntryDef>MeleeAttack</logEntryDef>
+    <combatLogRulesHit>Maneuver_Slash_MeleeHit</combatLogRulesHit>
+    <combatLogRulesDeflect>Maneuver_Slash_MeleeDeflect</combatLogRulesDeflect>
+    <combatLogRulesMiss>Maneuver_Slash_MeleeMiss</combatLogRulesMiss>
+    <combatLogRulesDodge>Maneuver_Slash_MeleeDodge</combatLogRulesDodge>
+  </ManeuverDef>
+  
+  <ToolCapacityDef>
+    <defName>WW_MCE_Smash</defName>
+    <label>smash</label>
+  </ToolCapacityDef>
+</Defs>

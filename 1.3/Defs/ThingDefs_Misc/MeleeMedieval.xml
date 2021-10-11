@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+	<ThingDef ParentName="BaseMeleeWeapon_Sharp_Quality">
+		<defName>WW_MCE_MeleeWeapon_LongSword</defName>
+		<label>WW_MCE longsword</label>
+		<description>The ancient weapon of kings, the longsword can be used for slashing or stabbing.</description>
+		<graphicData>
+			<texPath>Things/Item/Equipment/WeaponMelee/LongSword</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+		</graphicData>
+		<techLevel>Medieval</techLevel>
+		<weaponTags>
+			<li>MedievalMeleeAdvanced</li>
+			<li>LongSword</li>
+		</weaponTags>
+		<costStuffCount>100</costStuffCount>
+		<thingSetMakerTags><li>RewardStandardQualitySuper</li></thingSetMakerTags>
+		<statBases>
+			<WorkToMake>18000</WorkToMake>
+			<Mass>2</Mass>
+		</statBases>
+		<relicChance>2</relicChance>
+		<equippedAngleOffset>-65</equippedAngleOffset>
+		<stuffCategories>
+			<li>Metallic</li>
+			<li>Woody</li>
+		</stuffCategories>
+		<tools>
+			<li Class="MeleeCombatExpansion.Tool_Adv">
+				<label>handle long</label>
+				<capacities>
+					<li>Blunt</li>
+				</capacities>
+				<power>9</power>
+				<cooldownTime>2</cooldownTime>
+				<stunChance>0.9</stunChance>
+				<stunDuration>60~120</stunDuration>
+			</li>
+			<li>
+				<label>smash</label>
+				<capacities>
+					<li>WW_MCE_Smash</li>
+				</capacities>
+				<power>9</power>
+				<cooldownTime>2</cooldownTime>
+			</li>
+			<li Class="MeleeCombatExpansion.Tool_Adv">
+				<label>shred</label>
+				<capacities>
+					<li>WW_MCE_Shred</li>
+				</capacities>
+				<power>9</power>
+				<cooldownTime>2</cooldownTime>
+				<apparelShredDamage>2~10</apparelShredDamage>
+			</li>
+			<li Class="MeleeCombatExpansion.Tool_Adv">
+				<label>handle long</label>
+				<capacities>
+					<li>Blunt</li>
+				</capacities>
+				<power>9</power>
+				<cooldownTime>2</cooldownTime>
+				<advancedMeleeReachBonus>2</advancedMeleeReachBonus>
+			</li>
+			<li>
+				<label>pierce</label>
+				<capacities>
+					<li>WW_MCE_Pierce</li>
+				</capacities>
+				<power>23</power>
+				<cooldownTime>2.6</cooldownTime>
+			</li>
+			<li>
+				<label>cleave</label>
+				<capacities>
+					<li>WW_MCE_Cleave</li>
+				</capacities>
+				<power>23</power>
+				<cooldownTime>2.6</cooldownTime>
+			</li>
+
+		</tools>
+		<recipeMaker>
+			<researchPrerequisite>LongBlades</researchPrerequisite>
+			<skillRequirements>
+				<Crafting>5</Crafting>
+			</skillRequirements>
+		</recipeMaker>
+	</ThingDef>
+
+</Defs>

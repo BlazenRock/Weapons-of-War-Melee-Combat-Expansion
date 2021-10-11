@@ -28,10 +28,14 @@ namespace MeleeCombatExpansion
 
             var gotoCastPositionMethod = typeof(Toils_Combat).GetNestedTypes(AccessTools.all).SelectMany(innerType => AccessTools.GetDeclaredMethods(innerType))
                 .FirstOrDefault(method => method.Name.Contains("<GotoCastPosition>") && method.ReturnType == typeof(void) && method.GetParameters().Length == 0);
-            harmony.Patch(gotoCastPositionMethod, transpiler: new HarmonyMethod(AccessTools.Method(typeof(Core), "GotoCastPositionTranspiler")));
+            harmony.Patch(gotoCastPositionMethod, transpiler: new HarmonyMethod(AccessTools.Method(typeof(Core), nameof(GotoCastPositionTranspiler))));
 
             var tryFindShootLineFromToMethod = AccessTools.Method(typeof(Verb), "TryFindShootLineFromTo");
-            harmony.Patch(tryFindShootLineFromToMethod, transpiler: new HarmonyMethod(AccessTools.Method(typeof(Core), "TryFindShootLineFromToTranspiler")));
+            harmony.Patch(tryFindShootLineFromToMethod, transpiler: new HarmonyMethod(AccessTools.Method(typeof(Core), nameof(TryFindShootLineFromToTranspiler))));
+
+            Log.Message("Done");
+            var applyMeleeDamageToTargetMethod = AccessTools.Method(typeof(Verb_MeleeAttackDamage), "ApplyMeleeDamageToTarget");
+            harmony.Patch(applyMeleeDamageToTargetMethod, transpiler: new HarmonyMethod(AccessTools.Method(typeof(Core), nameof(ApplyMeleeDamageToTargetTranspiler))));
 
             foreach (var thingDef in DefDatabase<ThingDef>.AllDefs)
             {
@@ -54,6 +58,8 @@ namespace MeleeCombatExpansion
                 if (codes[i].opcode == OpCodes.Ldc_R4 && codes[i].OperandIs(ShootTuning.MeleeRange))
                 {
                     yield return new CodeInstruction(OpCodes.Ldloc_0);
+                    yield return new CodeInstruction(OpCodes.Ldloc_1);
+                    yield return new CodeInstruction(OpCodes.Ldfld, AccessTools.Field(typeof(Job), "verbToUse"));
                     yield return new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(Core), nameof(GetMeleeReachRange)));
                 }
                 else
@@ -82,22 +88,73 @@ namespace MeleeCombatExpansion
                 }
             }
         }
+        public static IEnumerable<CodeInstruction> ApplyMeleeDamageToTargetTranspiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+        {
+            var codes = instructions.ToList();
+            for (var i = 0; i < codes.Count; i++)
+            {
+                yield return codes[i];
+                if (codes[i].opcode == OpCodes.Stloc_0 && codes[i - 1].Calls(AccessTools.Method(typeof(Thing), "TakeDamage")))
+                {
+                    yield return new CodeInstruction(OpCodes.Ldarg_0);
+                    yield return new CodeInstruction(OpCodes.Ldloc_2);
+                    yield return new CodeInstruction(OpCodes.Ldloc_0);
+                    yield return new CodeInstruction(OpCodes.Ldarga_S, 1);
+                    yield return new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(LocalTargetInfo), "get_Thing"));
+                    yield return new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(Core), "DoAdditionalDamage"));
+                }
+            }
+        }
+
+        private static void DoAdditionalDamage(Verb verb, DamageInfo dinfo, DamageWorker.DamageResult damageResult, Thing thing)
+        {
+            if (thing is Pawn pawn && verb.tool is Tool_Adv tool)
+            {
+                if (tool.apparelShredDamage != null && tool.apparelShredDamage.max > 0 && damageResult.parts?.Count > 0)
+                {
+                    var apparels = damageResult.parts.SelectMany(part => pawn.apparel?.WornApparel?.Where(x => x.def.apparel.CoversBodyPart(part))).Distinct().ToList();
+                    if (apparels != null)
+                    {
+                        foreach (var apparel in apparels)
+                        {
+                            apparel.TakeDamage(new DamageInfo(dinfo.Def, tool.apparelShredDamage.RandomInRange, dinfo.ArmorPenetrationInt, dinfo.Angle,
+                                dinfo.Instigator, dinfo.HitPart, dinfo.Weapon, DamageInfo.SourceCategory.ThingOrUnknown));
+                            Log.Message("Damaging " + apparel + " - " + apparel.HitPoints);
+                            if (apparel.HitPoints <= 0)
+                            {
+                                apparel.Destroy();
+                            }
+                        }
+                    }
+                }
+                if (thing is Pawn victim && tool.stunChance.HasValue && Rand.Chance(tool.stunChance.Value))
+                {
+                    Log.Message("Stunning " + victim);
+                    victim.stances.stunner.StunFor(tool.stunDuration.RandomInRange, verb.caster);
+                }
+            }
+        }
 
         public static bool IsVanillaMeleeAttack(Verb verb)
         {
-            if (verb.Caster is Pawn pawn && pawn.GetMeleeReachRange() > ShootTuning.MeleeRange)
+            if (verb.Caster is Pawn pawn && pawn.GetMeleeReachRange(verb) > ShootTuning.MeleeRange)
             {
                 return false;
             }
             return true;
         }
 
-        public static float GetMeleeReachRange(this Pawn caster)
+        public static float GetMeleeReachRange(this Pawn caster, Verb verb)
         {
-            var equipment = caster.equipment?.Primary;
+            var equipment = verb?.EquipmentSource;
             if (equipment != null && equipment.def.IsMeleeWeapon)
             {
-                return Mathf.Max(caster.GetStatValue(MCE_DefOf.WW_MCE_MeleeReachRange), equipment.GetStatValue(MCE_DefOf.WW_MCE_MeleeWeaponReachRange));
+                var reach = Mathf.Max(caster.GetStatValue(MCE_DefOf.WW_MCE_MeleeReachRange), equipment.GetStatValue(MCE_DefOf.WW_MCE_MeleeWeaponReachRange));
+                if (verb?.tool is Tool_Adv tool)
+                {
+                    reach += tool.advancedMeleeReachBonus;
+                }
+                return reach;
             }
             else if (equipment is null)
             {
@@ -169,13 +226,13 @@ namespace MeleeCombatExpansion
                 }
                 else
                 {
-                    var meleeReachRange = actor.GetMeleeReachRange();
+                    var verbToUse = curJob.verbToUse ?? actor.meleeVerbs.curMeleeVerb ?? actor.meleeVerbs.TryGetMeleeVerb(thing);
+                    var meleeReachRange = actor.GetMeleeReachRange(verbToUse);
                     if (actor.Position.DistanceTo(thing.Position) > meleeReachRange)
                     {
                         CastPositionRequest newReq = default(CastPositionRequest);
                         newReq.caster = followAndAttack.actor;
                         newReq.target = thing;
-                        var verbToUse = curJob.verbToUse != null ? curJob.verbToUse : actor.meleeVerbs.TryGetMeleeVerb(thing);
                         newReq.verb = verbToUse;
                         newReq.maxRangeFromTarget = meleeReachRange;
                         newReq.wantCoverFromTarget = false;
