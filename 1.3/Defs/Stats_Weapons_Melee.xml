@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+
+  <StatDef>
+    <defName>WW_MCE_MeleeWeaponReachRange</defName>
+    <label>melee weapon reach range</label>
+    <description>melee weapon reach range</description>
+    <category>Weapon_Melee</category>
+    <defaultBaseValue>1.42</defaultBaseValue>
+    <minValue>0</minValue>
+    <toStringStyle>FloatTwo</toStringStyle>
+    <showIfUndefined>false</showIfUndefined>
+    <displayPriorityInCategory>4506</displayPriorityInCategory>
+  </StatDef>
+
+</Defs>

@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <!-- ================================== Melee =======================================-->
+
+  <StatDef>
+    <defName>WW_MCE_MeleeReachRange</defName>
+    <label>melee reach range</label>
+    <description>melee reach range</description>
+    <category>PawnCombat</category>
+    <defaultBaseValue>1.42</defaultBaseValue>
+    <minValue>0</minValue>
+    <toStringStyle>FloatTwo</toStringStyle>
+    <displayPriorityInCategory>4100</displayPriorityInCategory>
+  </StatDef>
+
+</Defs>
